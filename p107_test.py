@@ -2,7 +2,7 @@
 
 import unittest
 
-from euler_107 import Edge, Graph, mintree
+from p107 import Edge, Graph, mintree
 
 class TestEuler107(unittest.TestCase):
 

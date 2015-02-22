@@ -2,7 +2,7 @@
 
 import unittest
 
-import euler_059
+import p059
 
 class XorTestMixin:
 
@@ -52,19 +52,19 @@ class XorTestMixin:
 
 class SlowXorTests(unittest.TestCase, XorTestMixin):
     def setUp(self):
-        self.xor_func = euler_059.slow_xor
+        self.xor_func = p059.slow_xor
 
 
 class FastXorTests(unittest.TestCase, XorTestMixin):
     def setUp(self):
-        self.xor_func = euler_059.fast_xor
+        self.xor_func = p059.fast_xor
 
 
 class KeyGeneratorTest(unittest.TestCase):
     def test_key_generator(self):
         """Test that the key generator produces the expected
         number of keys, and test that the first few are what we expect."""
-        keys = [ x for x in euler_059.key_generator() ]
+        keys = [ x for x in p059.key_generator() ]
         self.assertEqual(26 * 26 * 26, len(keys))
         self.assertEqual(keys[0], 'aaa')
         self.assertEqual(keys[1], 'aab')

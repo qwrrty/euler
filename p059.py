@@ -24,11 +24,11 @@
 # 64-bit integer arrays and using numpy.bitwise_xor(), run time is
 # improved by a factor of 3x-5x.
 #
-# hitchcock:twp% python euler_059.py --slow
+# hitchcock:twp% python p059.py --slow
 # 107359
 # 3.221932
 #
-# hitchcock:twp% python euler_059.py
+# hitchcock:twp% python p059.py
 # 107359
 # 0.745225
 
