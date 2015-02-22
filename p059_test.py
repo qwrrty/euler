@@ -2,7 +2,7 @@
 
 import unittest
 
-import p059
+from p059 import XORDecoder
 
 class XorTestMixin:
 
@@ -52,23 +52,73 @@ class XorTestMixin:
 
 class SlowXorTests(unittest.TestCase, XorTestMixin):
     def setUp(self):
-        self.xor_func = p059.slow_xor
+        self.xor_func = XORDecoder.slow_xor
 
 
 class FastXorTests(unittest.TestCase, XorTestMixin):
     def setUp(self):
-        self.xor_func = p059.fast_xor
+        self.xor_func = XORDecoder.fast_xor
 
 
 class KeyGeneratorTest(unittest.TestCase):
     def test_key_generator(self):
         """Test that the key generator produces the expected
         number of keys, and test that the first few are what we expect."""
-        keys = [ x for x in p059.key_generator() ]
+        xd = XORDecoder()
+        keys = [ x for x in xd.key_generator() ]
         self.assertEqual(26 * 26 * 26, len(keys))
         self.assertEqual(keys[0], 'aaa')
         self.assertEqual(keys[1], 'aab')
         self.assertEqual(keys[2], 'aac')
+
+
+class DecipherTest(unittest.TestCase):
+    """Test XORDecoder.decipher() calls with a known dictionary."""
+    def setUp(self):
+        self.xd = XORDecoder()
+        self.xd.set_dictionary(
+            set("alpha bravo charlie delta echo foxtrot golf hotel".split()))
+
+    def test_decipher_all_words_in_dict(self):
+        """Test that decipher() succeeds on a string whose words are all
+        found in the dictionary."""
+        src = 'alpha bravo foxtrot charlie foxtrot golf hotel'
+        key = 'fox'
+        data = [ord(x) for x in src]
+        cipher = XORDecoder.fast_xor(data, key)
+        cipherdata = [ord(x) for x in cipher]
+        self.assertEqual(src, self.xd.decipher(cipherdata))
+
+    def test_decipher_half_words_in_dict(self):
+        """Test that decipher() succeeds when 50% of the words in the source
+        are in the dictionary.
+        """
+        src = 'alpha bravo foxtrot foxtrot india juliet november oscar'
+        key = 'fox'
+        data = [ord(x) for x in src]
+        cipher = XORDecoder.fast_xor(data, key)
+        cipherdata = [ord(x) for x in cipher]
+        self.assertEqual(src, self.xd.decipher(cipherdata))
+
+    def test_decipher_few_words_in_dict(self):
+        """Test that decipher() fails when less than 50% of the words in
+        the source are found in the dictionary."""
+        src = 'alpha bravo foxtrot foxtrot india juliet november oscar quebec romeo'
+        key = 'fox'
+        data = [ord(x) for x in src]
+        cipher = XORDecoder.fast_xor(data, key)
+        cipherdata = [ord(x) for x in cipher]
+        self.assertEqual(None, self.xd.decipher(cipherdata))
+
+    def test_decipher_key_not_in_source(self):
+        """Test that decipher() fails when the key is not found at least
+        twice in the cleartext."""
+        src = 'alpha bravo charlie delta echo foxtrot'
+        key = 'fox'
+        data = [ord(x) for x in src]
+        cipher = XORDecoder.fast_xor(data, key)
+        cipherdata = [ord(x) for x in cipher]
+        self.assertEqual(None, self.xd.decipher(cipherdata))
 
 
 if __name__ == '__main__':
