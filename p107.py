@@ -147,4 +147,4 @@ if __name__ == '__main__':
     savings = g.total_weight() - mg.total_weight()
     t2 = time.clock()
     print savings
-    print t2 - t1
+    print "{} seconds".format(t2 - t1)

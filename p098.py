@@ -159,4 +159,4 @@ if __name__ == '__main__':
     maxsq = findmaxsquare(inputfile='p098_words.txt')
     runtime = time.clock() - t1
     print maxsq
-    print runtime
+    print "{} seconds".format(runtime)

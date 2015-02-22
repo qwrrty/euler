@@ -185,5 +185,5 @@ if __name__ == '__main__':
     msgsum = sum([ ord(ch) for ch in s ])
     t2 = time.clock()
     print msgsum
-    print t2 - t1
+    print "{} seconds".format(t2 - t1)
 
