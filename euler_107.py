@@ -101,17 +101,28 @@ class Graph:
     def total_weight(self):
         return sum([ sum(row) for row in self._edges ]) / 2
 
+
 def mintree(graph):
+    """Uses Kruskal's algorithm to build a new Graph representing the
+    minimum spanning tree for the input graph.
+
+    Returns the new Graph object.
+
+    Raises RuntimeError if a MST cannot be built from the input graph
+    (i.e. it is not connected).
+    """
     edgequeue = []
-    component = range(graph.num_vertices())
+    nvertices = graph.num_vertices()
+    component = range(nvertices)
+    component_count = nvertices
     mst = Graph()
-    mst.set_vertices(graph.num_vertices())
+    mst.set_vertices(nvertices)
 
     # Build a heap of edges by weight.
     for e in graph.edges():
         heapq.heappush(edgequeue, e)
     # Add each edge to the new graph if the components are not connected
-    while edgequeue:
+    while component_count > 1 and edgequeue:
         e = heapq.heappop(edgequeue)
         if component[e.v1()] != component[e.v2()]:
             mst.add_edge(e)
@@ -120,7 +131,14 @@ def mintree(graph):
             for i in range(len(component)):
                 if component[i] == oldc:
                     component[i] = newc
+            component_count -= 1
+
+    if component_count > 1:
+        # The input graph was not connected, so no minimum spanning
+        # tree can be built.
+        raise RuntimeError("input graph is not connected")
     return mst
+
 
 if __name__ == '__main__':
     t1 = time.clock()
